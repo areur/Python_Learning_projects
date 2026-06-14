@@ -2,8 +2,6 @@ import numpy as np
 import matplotlib.pyplot as mlt
 from matplotlib.widgets import Slider, Button
 
-print("son")
-
 fig, plots = mlt.subplots(1,2,figsize=(20,5))
 fig.subplots_adjust(left=0.25,bottom=0.25)
 
