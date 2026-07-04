@@ -1,7 +1,6 @@
 import numpy as np
+from sklearn.base import BaseEstimator, RegressorMixin
 from sklearn.linear_model import LinearRegression
-import matplotlib.pyplot as mlt
-from matplotlib.widgets import Slider, Button
 
 """
 -Modification for handling intercepts
@@ -24,36 +23,33 @@ from matplotlib.widgets import Slider, Button
 
 Optional: Matplotlib UI
 """
-class projectionRegression:
+class projectionRegression(BaseEstimator, RegressorMixin):
 
     def __init__(self, interceptEnabled=False):
-        self.weights = 1;
-        self.interceptEnabled = interceptEnabled;
+        self.interceptEnabled = interceptEnabled
 
-    def fit(self,X,y) -> None:
+    def fit(self,X,y) -> projectionRegression:
         # Project y onto the space whos basis is X
 
-        # Step 1: Check for intercepts and adjust
+        # Step 1: Ensure y is two dimensional
+        y = np.asarray(y).squeeze()
+
+        # Step 2: Check for intercepts and adjust
         Xhat = self.__interceptHandling(X)
 
-        # Step 2: Find part of equation that gets inversed X^top * X
+        # Step 3: Find part of equation that gets inversed X^top * X
         Xtop = np.transpose(Xhat)
         toInverse = np.dot(Xtop,Xhat)
         Inverse = np.linalg.inv(toInverse)
 
-        # Step 3: apply equation 
-        self.weights = np.dot(np.dot(Inverse,Xtop),y)
-        print(self.weights)
-
+        # Step 4: apply equation 
+        self.weights_ = np.dot(np.dot(Inverse,Xtop),y)
+        return self
 
     def predict(self,X_new): # multiply using the equation y = Xw 
         Xhat_new = self.__interceptHandling(X_new)
-        try:
-            res = np.dot(Xhat_new,self.weights)
-        except ValueError as e:
-            print("error",e)
-        else:
-            return res
+        res = np.dot(Xhat_new,self.weights_)
+        return res
 
     def __interceptHandling(self,X):
         onesColumn = np.ones((X.shape[0],1))
@@ -63,25 +59,32 @@ class projectionRegression:
             Xhat = X
         return Xhat
     
-model = projectionRegression(True)
-professional = LinearRegression()
+def main():
+    model = projectionRegression(True)
+    professional = LinearRegression()
 
-startingX = np.array([[2,4],
-                      [5,3],
-                     [9,7]])
-startingY = np.array([[2],
-                      [5],
-                      [8]])
+    startingX = np.array([[2,4],
+                        [5,3],
+                        [9,7]])
+    startingY = np.array([2,
+                        5,
+                        8])
 
-testingX = np.array([[6,7],
-                     [2,1],
-                     [1,7]])
+    testingX = np.array([[6,7],
+                        [2,1],
+                        [1,7]])
 
-model.fit(startingX,startingY)
-professional.fit(startingX,startingY)
+    model.fit(startingX,startingY)
+    professional.fit(startingX,startingY)
 
-projGuess = model.predict(testingX)
-LinRegGuess = professional.predict(testingX)
+    projGuess = model.predict(testingX)
+    LinRegGuess = professional.predict(testingX)
 
-print(projGuess)
-print(LinRegGuess)
+    print("projectionRegression:",projGuess)
+    print("LinearRegression:",LinRegGuess)
+
+if __name__ == "__main__":
+    # finally figured out why people do this, 
+    # i tried to import the class from this file and it ran the example
+    main()
+

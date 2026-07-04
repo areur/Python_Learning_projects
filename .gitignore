@@ -1,3 +1,4 @@
 ML/venv
 requirements.txt
 ML/Datasets
+**/__pycache__
