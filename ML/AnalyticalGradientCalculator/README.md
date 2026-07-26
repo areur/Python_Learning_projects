@@ -29,8 +29,9 @@ $$
 $$
 
 $$
-\frac{\partial L}{\partial e} = e \\\\ \frac{\partial e}{\partial \hat{y}} = 1 \\\\ \frac{\partial \hat{y}}{\partial z} = \sigma'(z) \\\\ \frac{\partial z}{\partial w} = \frac{\partial}{\partial w}([w_1x_1+w_2x_2+...+w_Dx_D]) = x^\top
+\frac{\partial L}{\partial e} = e \\\\ \frac{\partial e}{\partial \hat{y}} = 1 \\\\ \frac{\partial \hat{y}}{\partial z} = \sigma'(z) \\\\ \frac{\partial z}{\partial w} = \frac{\partial}{\partial w}([w_{1} x_{1}+ w_{2} x_{2} +...+w_{D} x_{D}]) = x^\top
 $$
+
 $$
-\frac{\partial L}{\partial w} = (\hat{y}-y)*1*\sigma'(z)*x^\top
+\frac{\partial L}{\partial w} = (\hat{y}-y) \cdot 1 \cdot \sigma'(z) \cdot x^\top
 $$
