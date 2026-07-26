@@ -1,6 +1,10 @@
 import numpy as np
 from src.neuron import neuron
-h = 10**-4
+# apparently this file was the week 7 project - Autodiff Finite-Difference Engine
+# Not sure where the AutoDiff part comes in.. perhaps I need to write better prompts
+# when asking for projects
+
+h = 10**-4 # small value used in limits
 
 # dh = [dL/dw1, dL/dw2, ...] array of partial derivatives dL/dw, from the limit definition (pg. 126 of Mathematics for Machine Learning)
 # dh_i = index i partial derivative (dL/dwi)
