@@ -1,0 +1,1 @@
+A collection of projects I did in python. Folders should have readmes in them with descriptions
