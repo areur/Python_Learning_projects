@@ -41,8 +41,8 @@ class Neuron:
         # Calculate the gradient used to adjust weights during backpropagation
         derivs: ndarray = np.atleast_2d(np.asarray(self.dL_dyhat * self.dyhat_dz))
 
-        # (3,1) = (1,1) * (3*1)
-        dL_dw = np.dot(self.x,derivs.T) /batchSize # averaged over batch size
+        # (numFeatures,1) = (numFeatures,1) * (3*1)
+        dL_dw = np.dot(self.x,derivs.T)
         dL_db = float(np.mean(derivs))
 
         return (dL_dw, dL_db)
@@ -129,7 +129,5 @@ class Neuron:
             losses_weight.append(dL_dw)
             losses_bias.append(dL_db)
 
-        avg_weight, avg_bias = np.average(losses_weight), np.average(losses_bias)
-
-        return (loopLoss,avg_weight,avg_bias)
+        return (loopLoss/numBatches,float(self.weights[0,0]),float(self.bias))
     

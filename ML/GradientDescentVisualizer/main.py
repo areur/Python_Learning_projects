@@ -45,7 +45,7 @@ singleNeuron = Neuron(1)
 #       Draw the Weight and Bias values over time
 #   Important function: update, adds to the graphs each loop
 
-def animate_sgd(inputs,outputs,sizeOfBatch,epochs,lr=0.05):
+def animate_sgd(inputs,outputs,sizeOfBatch,epochs,lr=0.001):
     Weight_vals, bias_vals = [], []
     loss_vals = []
 
@@ -66,14 +66,13 @@ def animate_sgd(inputs,outputs,sizeOfBatch,epochs,lr=0.05):
     ax[1].set_xlabel("Epochs")
     ax[1].set_ylabel("Loss")
     ax[1].set_xlim(0,epochs)
-    ax[1].set_ylim(0,120_000)
     plotLoss, = ax[1].plot([],[],'b')
 
 
     ax[2].set_title("Weights")
     ax[2].set_xlabel("Epochs")
     ax[2].set_xlim(0,epochs)
-    ax[2].set_ylim(-2,4)
+    #ax[2].set_ylim(-2,4)
     plotWeights, = ax[2].plot([],[],'C5', label="W")
     plotBiases, = ax[2].plot([],[],'C8', label="b")
     ax[2].legend()
@@ -97,6 +96,10 @@ def animate_sgd(inputs,outputs,sizeOfBatch,epochs,lr=0.05):
         plotLoss.set_data(range(epoch),loss_vals)
         plotWeights.set_data(range(epoch),Weight_vals)
         plotBiases.set_data(range(epoch),bias_vals)
+
+        allParams = Weight_vals + bias_vals
+        ax[2].set_ylim(min(allParams) - 0.5, max(allParams) + 0.5)
+        
         return plotLine,plotLoss,plotWeights,plotBiases
 
     anim = animation.FuncAnimation(
@@ -111,6 +114,6 @@ def animate_sgd(inputs,outputs,sizeOfBatch,epochs,lr=0.05):
     return anim
 
 
-anim = animate_sgd(X_train,y_raw,16,epochs=100)
+anim = animate_sgd(X_train,y_raw,16,epochs=100, lr=0.01)
 mlt.show()
 
