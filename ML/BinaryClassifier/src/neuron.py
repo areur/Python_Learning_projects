@@ -2,6 +2,7 @@ import numpy as np
 from numpy import ndarray
 from src import activations
 from src import losses
+#from utils.gradientChecker import checkGradient
 
 class Neuron:
 
@@ -28,7 +29,7 @@ class Neuron:
         yhat, self.dyhat_dz = activations.sigmoid(z)
 
         if y is not None: # y is not provided during inference
-            loss, self.dL_dyhat = losses.squaredLoss(yhat,y)
+            loss, self.dL_dyhat = losses.binary_CrossEntropyLoss(yhat,y)
             return (loss, yhat)
             
 
@@ -40,8 +41,8 @@ class Neuron:
         # Calculate the gradient used to adjust weights during backpropagation
         derivs: ndarray = np.atleast_2d(np.asarray(self.dL_dyhat * self.dyhat_dz))
 
-        # (3,1) = (1,1) * (3*1)
-        dL_dw = np.dot(self.x,derivs.T) /batchSize # averaged over batch size
+        # (numFeatures,1) = (numFeatures,1) * (3*1)
+        dL_dw = np.dot(self.x,derivs.T)
         dL_db = float(np.mean(derivs))
 
         return (dL_dw, dL_db)
@@ -127,6 +128,5 @@ class Neuron:
             biases.append(self.bias)
             losses_weight.append(dL_dw)
             losses_bias.append(dL_db)
-
-        return (loopLoss,self.weights,self.bias)
-
+        print(self.weights.shape)
+        return (loopLoss/numBatches,self.weights,self.bias)
